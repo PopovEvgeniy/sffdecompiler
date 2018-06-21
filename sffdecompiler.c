@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,31 +8,32 @@ void show_start_message();
 void show_end_message();
 void show_intro();
 void command_line_help();
-void show_progress(unsigned long int start, unsigned long int stop);
-void go_offset(FILE *file, unsigned long int offset);
+void show_progress(const unsigned long int start,const unsigned long int stop);
+FILE *open_input_file(const char *name);
+FILE *create_output_file(const char *name);
+void go_offset(FILE *file,const unsigned long int offset);
+void data_dump(FILE *input,FILE *output,const size_t length);
 unsigned long int get_file_size(FILE *file);
-void check_memory(void *memory);
-char *get_string_memory(unsigned long int length);
-unsigned char *get_memory(unsigned long int length);
-FILE *open_input_file(char *name);
-FILE *create_output_file(char *name);
-void data_dump(FILE *input, FILE *output, unsigned long int length);
-unsigned long int get_extension_position(char *source);
-char *get_short_name(char *name);
-char *get_name(unsigned long int index,char *short_name, char *extension);
+void data_dump(FILE *input,FILE *output,const size_t length);
+void check_memory(const void *memory);
+char *get_string_memory(const size_t length);
+unsigned char *get_memory(const size_t length);
+size_t get_extension_position(const char *source);
+char *get_short_name(const char *name);
+char *get_name(const unsigned long int index,const char *short_name,const char *extension);
 unsigned long int read_sff_head(FILE *input);
 sff_subhead read_sff_subhead(FILE *input);
-void write_palette(FILE *output,unsigned char *palette);
+void write_palette(FILE *output,const unsigned char *palette);
 unsigned char *get_palette_memory();
 void read_palette(FILE *input,unsigned char *palette);
-void extract_palette(char *name,unsigned char *palette);
-void set_palette(FILE *output, sff_subhead subhead, unsigned char *palette, unsigned char *shared);
-unsigned char *extract_first(FILE *input, char *short_name);
-void extract_normal_sprite(FILE *input,char *name,sff_subhead subhead,unsigned char *palette, unsigned char *shared);
-void extract_linked_sprite(char *name,char *short_name,unsigned short int index);
-void extract_last(FILE *input,char *name,unsigned long int sff_size,sff_subhead subhead,unsigned char *palette, unsigned char *shared);
-void extract(FILE *input,char *short_name);
-void work(char *sff_name);
+void extract_palette(const char *name,unsigned char *palette);
+void set_palette(FILE *output,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+unsigned char *extract_first(FILE *input,const char *short_name);
+void extract_normal_sprite(FILE *input,const char *name,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+void extract_linked_sprite(const char *name,const char *short_name,const unsigned short int index);
+void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+void extract(FILE *input,const char *short_name);
+void work(const char *sff_name);
 
 int main(int argc, char *argv[])
 {
@@ -61,7 +63,7 @@ void show_end_message()
  puts("Work finish");
 }
 
-void show_progress(unsigned long int start, unsigned long int stop)
+void show_progress(const unsigned long int start,const unsigned long int stop)
 {
  unsigned long int progress;
  progress=start+1;
@@ -75,8 +77,8 @@ void show_intro()
 {
  puts(" ");
  puts("SFF DECOMPILER");
- puts("Version 1.6.9");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2016 year");
+ puts("Version 1.7.4");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2018 year");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
  puts("Sff extract is created by Osuna Richert Christophe");
@@ -88,7 +90,33 @@ void command_line_help()
  puts("You must give a target file name as command line argument!");
 }
 
-void go_offset(FILE *file, unsigned long int offset)
+FILE *open_input_file(const char *name)
+{
+ FILE *file;
+ file=fopen(name,"rb");
+ if (file==NULL)
+ {
+  puts(" ");
+  puts("File operation error");
+  exit(2);
+ }
+ return file;
+}
+
+FILE *create_output_file(const char *name)
+{
+ FILE *file;
+ file=fopen(name,"wb");
+ if (file==NULL)
+ {
+  puts(" ");
+  puts("File operation error");
+  exit(2);
+ }
+ return file;
+}
+
+void go_offset(FILE *file,const unsigned long int offset)
 {
  fseek(file,offset,SEEK_SET);
 }
@@ -102,65 +130,15 @@ unsigned long int get_file_size(FILE *file)
  return length;
 }
 
-void check_memory(void *memory)
-{
- if(memory==NULL)
- {
-  puts(" ");
-  puts("Can't allocate memory");
-  exit(1);
- }
-
-}
-
-char *get_string_memory(unsigned long int length)
-{
- char *memory=NULL;
- memory=(char*)calloc(length+1,1);
- check_memory(memory);
- return memory;
-}
-
-unsigned char *get_memory(unsigned long int length)
-{
- return (unsigned char*)calloc(length,1);
-}
-
-FILE *open_input_file(char *name)
-{
- FILE *file;
- file=fopen(name,"rb");
- if (file==NULL)
- {
-  puts(" ");
-  puts("File operation error");
-  exit(2);
- }
- return file;
-}
-
-FILE *create_output_file(char *name)
-{
- FILE *file;
- file=fopen(name,"wb");
- if (file==NULL)
- {
-  puts(" ");
-  puts("File operation error");
-  exit(2);
- }
- return file;
-}
-
-void data_dump(FILE *input, FILE *output, unsigned long int length)
+void data_dump(FILE *input,FILE *output,const size_t length)
 {
  unsigned char single_byte;
- unsigned long int index;
+ size_t index;
  unsigned char *buffer=NULL;
- buffer=(unsigned char*)calloc(length,1);
+ buffer=(unsigned char*)calloc(length,sizeof(unsigned char));
  if (buffer==NULL)
  {
-  for(index=0;index<length;index++)
+  for(index=0;index<length;++index)
   {
    fread(&single_byte,1,1,input);
    fwrite(&single_byte,1,1,output);
@@ -176,10 +154,37 @@ void data_dump(FILE *input, FILE *output, unsigned long int length)
 
 }
 
-unsigned long int get_extension_position(char *source)
+void check_memory(const void *memory)
 {
- unsigned long int index;
- for(index=strlen(source);index>0;index--)
+ if(memory==NULL)
+ {
+  puts(" ");
+  puts("Can't allocate memory");
+  exit(1);
+ }
+
+}
+
+char *get_string_memory(const size_t length)
+{
+ char *memory=NULL;
+ memory=(char*)calloc(length+1,sizeof(char));
+ check_memory(memory);
+ return memory;
+}
+
+unsigned char *get_memory(const size_t length)
+{
+ unsigned char *memory=NULL;
+ memory=(unsigned char*)calloc(length,sizeof(unsigned char));
+ check_memory(memory);
+ return memory;
+}
+
+size_t get_extension_position(const char *source)
+{
+ size_t index;
+ for(index=strlen(source);index>0;--index)
  {
   if(source[index]=='.')
   {
@@ -191,29 +196,24 @@ unsigned long int get_extension_position(char *source)
  return index;
 }
 
-char *get_short_name(char *name)
+char *get_short_name(const char *name)
 {
-unsigned long int length;
-char *result=NULL;
-length=get_extension_position(name);
-result=get_string_memory(length);
-strncpy(result,name,length);
-return result;
+ size_t length;
+ char *result=NULL;
+ length=get_extension_position(name);
+ result=get_string_memory(length);
+ strncpy(result,name,length);
+ return result;
 }
 
-char *get_name(unsigned long int index,char *short_name, char *extension)
+char *get_name(const unsigned long int index,const char *short_name,const char *extension)
 {
  char *name=NULL;
- char *result=NULL;
- unsigned long int length;
+ size_t length;
  length=strlen(short_name)+strlen(extension)+12;
  name=get_string_memory(length);
  sprintf(name,"%s%ld%s",short_name,index,extension);
- length=strlen(name);
- result=get_string_memory(length);
- strncpy(result,name,length);
- free(name);
- return result;
+ return name;
 }
 
 unsigned long int read_sff_head(FILE *input)
@@ -237,25 +237,22 @@ sff_subhead read_sff_subhead(FILE *input)
  return subhead;
 }
 
-void write_palette(FILE *output,unsigned char *palette)
+void write_palette(FILE *output,const unsigned char *palette)
 {
  fwrite(palette,768,1,output);
 }
 
 unsigned char *get_palette_memory()
 {
- unsigned char *memory=NULL;
- memory=(unsigned char*)calloc(768,1);
- check_memory(memory);
- return memory;
+ return get_memory(768);
 }
 
 void read_palette(FILE *input,unsigned char *palette)
 {
-  fread(palette,768,1,input);
+ fread(palette,768,1,input);
 }
 
-void extract_palette(char *name,unsigned char *palette)
+void extract_palette(const char *name,unsigned char *palette)
 {
  FILE *input;
  unsigned long int length;
@@ -266,7 +263,7 @@ void extract_palette(char *name,unsigned char *palette)
  fclose(input);
 }
 
-void set_palette(FILE *output, sff_subhead subhead, unsigned char *palette, unsigned char *shared)
+void set_palette(FILE *output,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
 {
  if (subhead.same_pal==1)
  {
@@ -283,7 +280,7 @@ void set_palette(FILE *output, sff_subhead subhead, unsigned char *palette, unsi
 
 }
 
-unsigned char *extract_first(FILE *input, char *short_name)
+unsigned char *extract_first(FILE *input,const char *short_name)
 {
  sff_subhead subhead;
  unsigned long int length;
@@ -294,7 +291,7 @@ unsigned char *extract_first(FILE *input, char *short_name)
  name=get_name(1,short_name,".pcx");
  output=create_output_file(name);
  length=subhead.next_offset-ftell(input);
- data_dump(input,output,length);
+ data_dump(input,output,(size_t)length);
  fclose(output);
  free(name);
  go_offset(input,subhead.next_offset-768);
@@ -303,18 +300,18 @@ unsigned char *extract_first(FILE *input, char *short_name)
  return palette;
 }
 
-void extract_normal_sprite(FILE *input,char *name,sff_subhead subhead,unsigned char *palette, unsigned char *shared)
+void extract_normal_sprite(FILE *input,const char *name,sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
 {
  FILE *output;
  unsigned long int length;
  output=create_output_file(name);
  length=subhead.next_offset-ftell(input);
- data_dump(input,output,length);
+ data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
 }
 
-void extract_linked_sprite(char *name,char *short_name,unsigned short int index)
+void extract_linked_sprite(const char *name,const char *short_name,const unsigned short int index)
 {
  FILE *output;
  FILE *input;
@@ -324,24 +321,24 @@ void extract_linked_sprite(char *name,char *short_name,unsigned short int index)
  input=open_input_file(linked_name);
  output=create_output_file(name);
  length=get_file_size(input);
- data_dump(input,output,length);
+ data_dump(input,output,(size_t)length);
  fclose(input);
  fclose(output);
  free(linked_name);
 }
 
-void extract_last(FILE *input,char *name,unsigned long int sff_size,sff_subhead subhead,unsigned char *palette, unsigned char *shared)
+void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
 {
  FILE *output;
  unsigned long int length;
  output=create_output_file(name);
  length=sff_size-ftell(input);
- data_dump(input,output,length);
+ data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
 }
 
-void extract(FILE *input,char *short_name)
+void extract(FILE *input,const char *short_name)
 {
  char *name=NULL;
  unsigned char *palette=NULL;
@@ -354,7 +351,7 @@ void extract(FILE *input,char *short_name)
  show_progress(0,number);
  palette=extract_first(input,short_name);
  memmove(shared,palette,768);
- for(index=1;index<number;index++)
+ for(index=1;index<number;++index)
  {
   subhead=read_sff_subhead(input);
   show_progress(index,number);
@@ -383,7 +380,7 @@ void extract(FILE *input,char *short_name)
  free(palette);
 }
 
-void work(char *sff_name)
+void work(const char *sff_name)
 {
  FILE *input;
  char *short_name=NULL;
