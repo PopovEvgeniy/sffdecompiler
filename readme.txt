@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.7.5
+                             Version 1.7.6
 
 System requirement
 
@@ -54,4 +54,4 @@ Version history
 1.6 - 1.6.8 - Small changes.
 1.6.9 - Source code was improved. Linux support has been added.
 1.6.9.0.1 – Documentation was updated.
-1.7 - 1.7.5 - Small changes.
+1.7 - 1.7.6 - Small changes.
