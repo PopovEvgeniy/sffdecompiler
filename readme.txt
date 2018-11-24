@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.7.6
+                             Version 1.7.6.1
 
 System requirement
 
@@ -40,8 +40,8 @@ Follow this steps:
 1.Extract content of source code archive.
 2.Open terminal and go to source code directory.
 3.
-Run for install: make install
-Run for uninstall: make uninstall
+Run as root for install: make install
+Run as root for uninstall: make uninstall
 
 Contact
 
@@ -55,3 +55,4 @@ Version history
 1.6.9 - Source code was improved. Linux support has been added.
 1.6.9.0.1 – Documentation was updated.
 1.7 - 1.7.6 - Small changes.
+1.7.6.1 - Makefile was updated.
