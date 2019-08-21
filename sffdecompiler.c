@@ -13,6 +13,7 @@ FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
 void go_offset(FILE *file,const unsigned long int offset);
 void data_dump(FILE *input,FILE *output,const size_t length);
+void fast_data_dump(FILE *input,FILE *output,const size_t length);
 unsigned long int get_file_size(FILE *file);
 void data_dump(FILE *input,FILE *output,const size_t length);
 void check_memory(const void *memory);
@@ -77,8 +78,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.7.6");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2018 year");
+ puts("Version 1.7.7");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2019 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
  puts("Sff extract is created by Osuna Richert Christophe");
@@ -92,28 +93,28 @@ void command_line_help()
 
 FILE *open_input_file(const char *name)
 {
- FILE *file;
- file=fopen(name,"rb");
- if (file==NULL)
+ FILE *target;
+ target=fopen(name,"rb");
+ if (target==NULL)
  {
   putchar('\n');
-  puts("File operation error");
-  exit(2);
+  puts("Can't open input file");
+  exit(1);
  }
- return file;
+ return target;
 }
 
 FILE *create_output_file(const char *name)
 {
- FILE *file;
- file=fopen(name,"wb");
- if (file==NULL)
+ FILE *target;
+ target=fopen(name,"wb");
+ if (target==NULL)
  {
   putchar('\n');
-  puts("File operation error");
+  puts("Can't create ouput file");
   exit(2);
  }
- return file;
+ return target;
 }
 
 void go_offset(FILE *file,const unsigned long int offset)
@@ -132,23 +133,29 @@ unsigned long int get_file_size(FILE *file)
 
 void data_dump(FILE *input,FILE *output,const size_t length)
 {
- unsigned char single_byte;
+ unsigned char data;
  size_t index;
+ data=0;
+ for (index=0;index<length;++index)
+ {
+  fread(&data,sizeof(unsigned char),1,input);
+  fwrite(&data,sizeof(unsigned char),1,input);
+ }
+
+}
+
+void fast_data_dump(FILE *input,FILE *output,const size_t length)
+{
  unsigned char *buffer=NULL;
  buffer=(unsigned char*)calloc(length,sizeof(unsigned char));
  if (buffer==NULL)
  {
-  for(index=0;index<length;++index)
-  {
-   fread(&single_byte,1,1,input);
-   fwrite(&single_byte,1,1,output);
-  }
-
+  data_dump(input,output,length);
  }
  else
  {
-  fread(buffer,length,1,input);
-  fwrite(buffer,length,1,output);
+  fread(buffer,sizeof(unsigned char),length,input);
+  fwrite(buffer,sizeof(unsigned char),length,output);
   free(buffer);
  }
 
@@ -158,9 +165,9 @@ void check_memory(const void *memory)
 {
  if(memory==NULL)
  {
-  puts(" ");
+  putchar('\n');
   puts("Can't allocate memory");
-  exit(1);
+  exit(3);
  }
 
 }
@@ -222,9 +229,9 @@ unsigned long int read_sff_head(FILE *input)
  fread(&head,sizeof(sff_head),1,input);
  if (strncmp(head.signature,"ElecbyteSpr",12)!=0)
  {
-  puts(" ");
+  putchar('\n');
   puts("Bad signature of a mugen graphic pseudo-archive!");
-  exit(3);
+  exit(4);
  }
  go_offset(input,head.sub_offset);
  return head.nb_imgs;
@@ -291,7 +298,7 @@ unsigned char *extract_first(FILE *input,const char *short_name)
  name=get_name(1,short_name,".pcx");
  output=create_output_file(name);
  length=subhead.next_offset-ftell(input);
- data_dump(input,output,(size_t)length);
+ fast_data_dump(input,output,(size_t)length);
  fclose(output);
  free(name);
  go_offset(input,subhead.next_offset-768);
@@ -306,7 +313,7 @@ void extract_normal_sprite(FILE *input,const char *name,sff_subhead subhead,cons
  unsigned long int length;
  output=create_output_file(name);
  length=subhead.next_offset-ftell(input);
- data_dump(input,output,(size_t)length);
+ fast_data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
 }
@@ -321,7 +328,7 @@ void extract_linked_sprite(const char *name,const char *short_name,const unsigne
  input=open_input_file(linked_name);
  output=create_output_file(name);
  length=get_file_size(input);
- data_dump(input,output,(size_t)length);
+ fast_data_dump(input,output,(size_t)length);
  fclose(input);
  fclose(output);
  free(linked_name);
@@ -333,7 +340,7 @@ void extract_last(FILE *input,const char *name,const unsigned long int sff_size,
  unsigned long int length;
  output=create_output_file(name);
  length=sff_size-ftell(input);
- data_dump(input,output,(size_t)length);
+ fast_data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
 }

@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.7.6.1
+                             Version 1.7.7
 
 System requirement
 
@@ -18,9 +18,10 @@ This program takes a target file name as command line argument.
 Exit codes
 
 0 - Operation successfully complete.
-1 - Can't allocate memory.
-2 - File operation error.
-3 - Invalid format.
+1 - Can't open input file.
+2 - Can't create output file.
+3 - Can't allocate memory.
+4 - Invalid format.
 
 License
 
@@ -56,3 +57,4 @@ Version history
 1.6.9.0.1 – Documentation was updated.
 1.7 - 1.7.6 - Small changes.
 1.7.6.1 - Makefile was updated.
+1.7.7 - Small changes.
