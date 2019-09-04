@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.7.7
+                             Version 1.7.9
 
 System requirement
 
@@ -20,8 +20,9 @@ Exit codes
 0 - Operation successfully complete.
 1 - Can't open input file.
 2 - Can't create output file.
-3 - Can't allocate memory.
-4 - Invalid format.
+3 - Can't jump to target offset.
+4 - Can't allocate memory.
+5 - Invalid format.
 
 License
 
@@ -57,4 +58,4 @@ Version history
 1.6.9.0.1 – Documentation was updated.
 1.7 - 1.7.6 - Small changes.
 1.7.6.1 - Makefile was updated.
-1.7.7 - Small changes.
+1.7.7 - 1.7.9 - Small changes.

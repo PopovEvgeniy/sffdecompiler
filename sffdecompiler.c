@@ -22,6 +22,7 @@ unsigned char *get_memory(const size_t length);
 size_t get_extension_position(const char *source);
 char *get_short_name(const char *name);
 char *get_name(const unsigned long int index,const char *short_name,const char *extension);
+void check_signature(const char *signature);
 unsigned long int read_sff_head(FILE *input);
 sff_subhead read_sff_subhead(FILE *input);
 void write_palette(FILE *output,const unsigned char *palette);
@@ -78,7 +79,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.7.7");
+ puts("Version 1.7.9");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2019 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
@@ -119,7 +120,13 @@ FILE *create_output_file(const char *name)
 
 void go_offset(FILE *file,const unsigned long int offset)
 {
- fseek(file,offset,SEEK_SET);
+ if (fseek(file,offset,SEEK_SET)!=0)
+ {
+  putchar('\n');
+  puts("Can't jump to target offset");
+  exit(3);
+ }
+
 }
 
 unsigned long int get_file_size(FILE *file)
@@ -167,7 +174,7 @@ void check_memory(const void *memory)
  {
   putchar('\n');
   puts("Can't allocate memory");
-  exit(3);
+  exit(4);
  }
 
 }
@@ -223,16 +230,22 @@ char *get_name(const unsigned long int index,const char *short_name,const char *
  return name;
 }
 
+void check_signature(const char *signature)
+{
+  if (strncmp(signature,"ElecbyteSpr",12)!=0)
+ {
+  putchar('\n');
+  puts("Bad signature of a mugen graphic pseudo-archive!");
+  exit(5);
+ }
+
+}
+
 unsigned long int read_sff_head(FILE *input)
 {
  sff_head head;
  fread(&head,sizeof(sff_head),1,input);
- if (strncmp(head.signature,"ElecbyteSpr",12)!=0)
- {
-  putchar('\n');
-  puts("Bad signature of a mugen graphic pseudo-archive!");
-  exit(4);
- }
+ check_signature(head.signature);
  go_offset(input,head.sub_offset);
  return head.nb_imgs;
 }
