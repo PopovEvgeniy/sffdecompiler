@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.7.9
+                             Version 1.8
 
 System requirement
 
@@ -58,4 +58,4 @@ Version history
 1.6.9.0.1 – Documentation was updated.
 1.7 - 1.7.6 - Small changes.
 1.7.6.1 - Makefile was updated.
-1.7.7 - 1.7.9 - Small changes.
+1.7.7 - 1.8 - Small changes.

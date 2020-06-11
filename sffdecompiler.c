@@ -72,15 +72,15 @@ void show_progress(const unsigned long int start,const unsigned long int stop)
  progress*=100;
  progress/=stop;
  putchar('\r');
- printf("Amount of extracted files: %ld from %ld.Progress:%ld%%",start+1,stop,progress);
+ printf("Amount of extracted files: %lu from %lu.Progress:%lu%%",start+1,stop,progress);
 }
 
 void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.7.9");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2019 years");
+ puts("Version 1.8");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2020 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
  puts("Sff extract is created by Osuna Richert Christophe");
@@ -226,7 +226,7 @@ char *get_name(const unsigned long int index,const char *short_name,const char *
  size_t length;
  length=strlen(short_name)+strlen(extension)+12;
  name=get_string_memory(length);
- sprintf(name,"%s%ld%s",short_name,index,extension);
+ sprintf(name,"%s%lu%s",short_name,index,extension);
  return name;
 }
 
