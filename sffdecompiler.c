@@ -79,7 +79,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.8");
+ puts("Version 1.8.1");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2020 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
@@ -146,7 +146,7 @@ void data_dump(FILE *input,FILE *output,const size_t length)
  for (index=0;index<length;++index)
  {
   fread(&data,sizeof(unsigned char),1,input);
-  fwrite(&data,sizeof(unsigned char),1,input);
+  fwrite(&data,sizeof(unsigned char),1,output);
  }
 
 }
