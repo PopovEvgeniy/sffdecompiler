@@ -29,11 +29,11 @@ void write_palette(FILE *output,const unsigned char *palette);
 unsigned char *get_palette_memory();
 void read_palette(FILE *input,unsigned char *palette);
 void extract_palette(const char *name,unsigned char *palette);
-void set_palette(FILE *output,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+void set_palette(FILE *output,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared);
 unsigned char *extract_first(FILE *input,const char *short_name);
-void extract_normal_sprite(FILE *input,const char *name,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared);
 void extract_linked_sprite(const char *name,const char *short_name,const unsigned short int index);
-void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared);
+void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared);
 void extract(FILE *input,const char *short_name);
 void work(const char *sff_name);
 
@@ -79,8 +79,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.8.1");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2020 years");
+ puts("Version 1.8.2");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2022 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some was code taken from Sff extract");
  puts("Sff extract is created by Osuna Richert Christophe");
@@ -283,11 +283,11 @@ void extract_palette(const char *name,unsigned char *palette)
  fclose(input);
 }
 
-void set_palette(FILE *output,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
+void set_palette(FILE *output,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared)
 {
- if (subhead.same_pal==1)
+ if (subhead->same_pal==1)
  {
-  if (subhead.group>152)
+  if (subhead->group>152)
   {
    write_palette(output,shared);
   }
@@ -320,12 +320,12 @@ unsigned char *extract_first(FILE *input,const char *short_name)
  return palette;
 }
 
-void extract_normal_sprite(FILE *input,const char *name,sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
+void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared)
 {
  FILE *output;
  unsigned long int length;
  output=create_output_file(name);
- length=subhead.next_offset-ftell(input);
+ length=subhead->next_offset-ftell(input);
  fast_data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
@@ -347,7 +347,7 @@ void extract_linked_sprite(const char *name,const char *short_name,const unsigne
  free(linked_name);
 }
 
-void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead subhead,const unsigned char *palette,const unsigned char *shared)
+void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead *subhead,const unsigned char *palette,const unsigned char *shared)
 {
  FILE *output;
  unsigned long int length;
@@ -380,7 +380,7 @@ void extract(FILE *input,const char *short_name)
   {
    if (subhead.length>0)
    {
-    extract_normal_sprite(input,name,subhead,palette,shared);
+    extract_normal_sprite(input,name,&subhead,palette,shared);
    }
    else
    {
@@ -390,7 +390,7 @@ void extract(FILE *input,const char *short_name)
   }
   else
   {
-   extract_last(input,name,sff_size,subhead,palette,shared);
+   extract_last(input,name,sff_size,&subhead,palette,shared);
   }
   go_offset(input,subhead.next_offset);
   extract_palette(name,shared);
