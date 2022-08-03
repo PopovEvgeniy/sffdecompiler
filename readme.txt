@@ -4,7 +4,7 @@
 
             Some code was taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.8.8.1
+                             Version 1.8.8.2
 
 System requirement
 
@@ -12,7 +12,7 @@ System requirement
 
 Description and usage
 
-This program created for extract a graphics from games that built on MUGEN game engine.
+This program let you extract a graphics from games that built on MUGEN game engine.
 This program takes a target file name as command line argument. 
 
 Exit codes
@@ -32,7 +32,7 @@ Source code
 
 The program source code compiled under Open Watcom.
 But you can do it under any modern C compiler.
-Source code can be compiled for wide range operation systems, but you need to create makefile or build script by yourself.
+Source code can be compiled for wide range operating systems, but you need to create makefile or build script by yourself.
 I provide only two things: compiled binary file for Windows and makefile for Linux.
 
 Install and uninstall under Linux
@@ -61,4 +61,4 @@ Version history
 1.7.7 - 1.8 - Small changes.
 1.8.1 - Small bug fixed.
 1.8.2 - 1.8.8 - Small changes.
-1.8.8.1 - Makefile updated.
+1.8.8.1 - 1.8.8.2 - Makefile updated.
