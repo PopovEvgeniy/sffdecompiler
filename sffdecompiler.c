@@ -4,10 +4,8 @@
 #include <string.h>
 #include "format.h"
 
-void show_start_message();
-void show_end_message();
 void show_intro();
-void command_line_help();
+void show_message(const char *message);
 void show_progress(const unsigned long int start,const unsigned long int stop);
 FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
@@ -38,27 +36,15 @@ int main(int argc, char *argv[])
  show_intro();
  if (argc<2)
  {
-  command_line_help();
+  show_message("You must give a target file name as command line argument");
  }
  else
  {
-  show_start_message();
+  show_message("Extracting a graphics... Please wait");
   work(argv[1]);
-  show_end_message();
+  show_message("Work finish");
  }
  return 0;
-}
-
-void show_start_message()
-{
- putchar('\n');
- puts("Extracting a graphics... Please wait");
-}
-
-void show_end_message()
-{
- putchar('\n');
- puts("Work finish");
 }
 
 void show_progress(const unsigned long int start,const unsigned long int stop)
@@ -75,17 +61,17 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.8.8");
+ puts("Version 1.8.9");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2022 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
- puts("Some was code taken from Sff extract");
- puts("Sff extract is created by Osuna Richert Christophe");
+ puts("Some was code take from Sff extract");
+ puts("Sff extract made by Osuna Richert Christophe");
 }
 
-void command_line_help()
+void show_message(const char *message)
 {
  putchar('\n');
- puts("You must give a target file name as command line argument!");
+ puts(message);
 }
 
 FILE *open_input_file(const char *name)
