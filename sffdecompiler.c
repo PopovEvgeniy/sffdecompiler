@@ -61,10 +61,10 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.8.9");
+ puts("Version 1.9");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2022 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
- puts("Some was code take from Sff extract");
+ puts("Some code taken from Sff extract");
  puts("Sff extract made by Osuna Richert Christophe");
 }
 
@@ -80,8 +80,7 @@ FILE *open_input_file(const char *name)
  target=fopen(name,"rb");
  if (target==NULL)
  {
-  putchar('\n');
-  puts("Can't open input file");
+  show_message("Can't open input file");
   exit(1);
  }
  return target;
@@ -93,8 +92,7 @@ FILE *create_output_file(const char *name)
  target=fopen(name,"wb");
  if (target==NULL)
  {
-  putchar('\n');
-  puts("Can't create ouput file");
+  show_message("Can't create ouput file");
   exit(2);
  }
  return target;
@@ -104,8 +102,7 @@ void go_offset(FILE *file,const unsigned long int offset)
 {
  if (fseek(file,offset,SEEK_SET)!=0)
  {
-  putchar('\n');
-  puts("Can't jump to target offset");
+  show_message("Can't jump to target offset");
   exit(3);
  }
 
@@ -154,8 +151,7 @@ void check_memory(const void *memory)
 {
  if(memory==NULL)
  {
-  putchar('\n');
-  puts("Can't allocate memory");
+  show_message("Can't allocate memory");
   exit(4);
  }
 
@@ -208,8 +204,7 @@ void check_signature(const char *signature)
 {
   if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
-  putchar('\n');
-  puts("Bad signature of a mugen graphic pseudo-archive!");
+  show_message("Bad signature of a mugen graphic pseudo-archive!");
   exit(5);
  }
 
