@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
 void show_progress(const unsigned long int start,const unsigned long int stop)
 {
  unsigned long int progress;
- progress=start+1;
- progress*=100;
+ progress=(start+1)*100;
  progress/=stop;
  putchar('\r');
  printf("Amount of extracted files: %lu from %lu.Progress:%lu%%",start+1,stop,progress);
@@ -61,8 +60,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.9.1");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2022 years");
+ puts("Version 1.9.2");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2023 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract");
  puts("Sff extract made by Osuna Richert Christophe");
@@ -204,7 +203,7 @@ void check_signature(const char *signature)
 {
   if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
-  puts("Bad signature of a mugen graphic pseudo-archive!");
+  show_message("Bad signature of a mugen graphic pseudo-archive!");
   exit(5);
  }
 
