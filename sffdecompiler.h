@@ -1,4 +1,11 @@
-// This code bases on code from Sff Extract
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define PALETTE_LENGTH 768
+
+// The format description bases on code from Sff Extract
 
 typedef struct
 {

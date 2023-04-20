@@ -1,8 +1,4 @@
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "format.h"
+#include "sffdecompiler.h"
 
 void show_intro();
 void show_message(const char *message);
@@ -60,7 +56,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.9.2");
+ puts("Version 1.9.5");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2023 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract");
@@ -229,8 +225,8 @@ void extract_palette(const char *name,char *palette)
 {
  FILE *input;
  input=open_input_file(name);
- go_offset(input,get_file_size(input)-768);
- fread(palette,sizeof(char),768,input);
+ go_offset(input,get_file_size(input)-PALETTE_LENGTH);
+ fread(palette,sizeof(char),PALETTE_LENGTH,input);
  fclose(input);
 }
 
@@ -240,11 +236,11 @@ void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,con
  {
   if (subhead->group>152)
   {
-   fwrite(shared,sizeof(char),768,output);
+   fwrite(shared,sizeof(char),PALETTE_LENGTH,output);
   }
   else
   {
-   fwrite(palette,sizeof(char),768,output);
+   fwrite(palette,sizeof(char),PALETTE_LENGTH,output);
   }
 
  }
@@ -265,9 +261,9 @@ char *extract_first(FILE *input,const char *short_name)
  fast_data_dump(input,output,(size_t)length);
  fclose(output);
  free(name);
- go_offset(input,subhead.next_offset-768);
- palette=get_memory(768);
- fread(palette,sizeof(char),768,input);
+ go_offset(input,subhead.next_offset-PALETTE_LENGTH);
+ palette=get_memory(PALETTE_LENGTH);
+ fread(palette,sizeof(char),PALETTE_LENGTH,input);
  return palette;
 }
 
@@ -317,11 +313,11 @@ void extract(FILE *input,const char *short_name)
  unsigned long int index,sff_size,number;
  sff_subhead subhead;
  sff_size=get_file_size(input);
- shared=get_memory(768);
+ shared=get_memory(PALETTE_LENGTH);
  number=read_sff_head(input);
  show_progress(0,number);
  palette=extract_first(input,short_name);
- memmove(shared,palette,768);
+ memcpy(shared,palette,PALETTE_LENGTH);
  for(index=1;index<number;++index)
  {
   subhead=read_sff_subhead(input);
