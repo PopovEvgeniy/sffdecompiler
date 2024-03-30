@@ -56,8 +56,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.9.5");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2023 years");
+ puts("Version 1.9.6");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2024 years");
  puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract");
  puts("Sff extract made by Osuna Richert Christophe");
@@ -199,7 +199,7 @@ void check_signature(const char *signature)
 {
   if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
-  show_message("Bad signature of a mugen graphic pseudo-archive!");
+  puts("Bad signature of a mugen graphic pseudo-archive!");
   exit(5);
  }
 

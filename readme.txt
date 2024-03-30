@@ -4,11 +4,11 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.9.5
+                             Version 1.9.6
 
 System requirement
 
-52 kilobytes free space on storage media.
+68 kilobytes free space on storage media.
 
 Description and usage
 
@@ -62,4 +62,4 @@ Version history
 1.8.1 - Small bug fixed.
 1.8.2 - 1.8.8 - Small changes.
 1.8.8.1 - 1.8.8.2 - Makefile updated.
-1.8.9 - 1.9.5 - Small changes.
+1.8.9 - 1.9.6 - Small changes.
