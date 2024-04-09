@@ -4,7 +4,7 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.9.6
+                             Version 1.9.7
 
 System requirement
 
@@ -30,9 +30,9 @@ This program distributed under GNU GENERAL PUBLIC LICENSE.
 
 Source code
 
-The program source code compiled under Open Watcom.
-But you can do it under any modern C compiler.
-Source code can be compiled for wide range operating systems, but you need to create makefile or build script by yourself.
+The source code compiled under Open Watcom.
+But you can compile it under any modern C compiler.
+Source code can be compiled for wide range of operating systems, but you need to create makefile or build script by yourself.
 I provide only two things: compiled the binary file for Windows and makefile for Linux.
 
 Install and uninstall under Linux
@@ -63,3 +63,4 @@ Version history
 1.8.2 - 1.8.8 - Small changes.
 1.8.8.1 - 1.8.8.2 - Makefile updated.
 1.8.9 - 1.9.6 - Small changes.
+1.9.7 - Visual C++ support improved.
