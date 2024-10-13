@@ -32,13 +32,13 @@ int main(int argc, char *argv[])
  show_intro();
  if (argc<2)
  {
-  show_message("You must give a target file name as command line argument");
+  show_message("You must give a target file name as the command-line argument");
  }
  else
  {
   show_message("Extracting a graphics... Please wait");
   work(argv[1]);
-  show_message("Work finish");
+  show_message("The work has been finished");
  }
  return 0;
 }
@@ -49,18 +49,17 @@ void show_progress(const unsigned long int start,const unsigned long int stop)
  progress=(start+1)*100;
  progress/=stop;
  putchar('\r');
- printf("Amount of extracted files: %lu from %lu.Progress:%lu%%",start+1,stop,progress);
+ printf("Amount of the extracted files: %lu from %lu.Progress:%lu%%",start+1,stop,progress);
 }
 
 void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.9.7");
+ puts("Version 1.9.8");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2024 years");
- puts("This program distributed under GNU GENERAL PUBLIC LICENSE");
- puts("Some code taken from Sff extract");
- puts("Sff extract made by Osuna Richert Christophe");
+ puts("This program is distributed under GNU GENERAL PUBLIC LICENSE");
+ puts("Some code taken from Sff extract by Osuna Richert Christophe");
 }
 
 void show_message(const char *message)
@@ -75,7 +74,7 @@ FILE *open_input_file(const char *name)
  target=fopen(name,"rb");
  if (target==NULL)
  {
-  show_message("Can't open input file");
+  show_message("Can't open the input file");
   exit(1);
  }
  return target;
@@ -87,7 +86,7 @@ FILE *create_output_file(const char *name)
  target=fopen(name,"wb");
  if (target==NULL)
  {
-  show_message("Can't create ouput file");
+  show_message("Can't create the ouput file");
   exit(2);
  }
  return target;
@@ -97,7 +96,7 @@ void go_offset(FILE *file,const unsigned long int offset)
 {
  if (fseek(file,offset,SEEK_SET)!=0)
  {
-  show_message("Can't jump to target offset");
+  show_message("Can't jump to the target offset");
   exit(3);
  }
 
@@ -199,7 +198,7 @@ void check_signature(const char *signature)
 {
   if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
-  puts("Bad signature of a mugen graphic pseudo-archive!");
+  puts("The bad signature of a mugen graphic pseudo-archive!");
   exit(5);
  }
 
