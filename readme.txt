@@ -4,7 +4,7 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.9.8.1
+                             Version 1.9.8.2
 
 System requirements
 
@@ -52,18 +52,18 @@ You can send me a letter at tuzik87@inbox.ru.
 Version history
 
 1.0: Initial version.
-1.0.1-1.5.9: The old stable builds.
+1.0.1-1.5.9: The old builds.
 1.6-1.6.8: The small changes.
-1.6.9: The source code is improved. Linux support has been added.
-1.6.9.0.1: Documentation updated.
+1.6.9: The source code has improved. Linux support has been added.
+1.6.9.0.1: The documentation has been updated.
 1.7-1.7.6: The small changes.
-1.7.6.1: The makefile updated.
+1.7.6.1: The makefile has been updated.
 1.7.7-1.8: The small changes.
-1.8.1: A small bug is fixed.
+1.8.1: A small bug has been fixed.
 1.8.2-1.8.8: The small changes.
-1.8.8.1-1.8.8.2: The makefile updated.
+1.8.8.1-1.8.8.2: The makefile has been updated.
 1.8.9-1.9.6: The small changes.
-1.9.7: Visual C++ support improved.
-1.9.7.1: Documentation updated.
+1.9.7: Visual C++ support has improved.
+1.9.7.1: The documentation has been updated.
 1.9.8: The small changes.
-1.9.8.1: Documentation updated.
+1.9.8.1-1.9.8.2: The documentation has been updated.
