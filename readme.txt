@@ -4,11 +4,11 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 1.9.8.3
+                             Version 1.9.9
 
 System requirements
 
-68 kilobytes of free space on storage media.
+36 kilobytes of free space on storage media.
 
 Description and usage
 
@@ -30,7 +30,7 @@ This program is distributed under GNU GENERAL PUBLIC LICENSE.
 
 Source code
 
-The code was compiled under Open Watcom.
+The code was compiled under Tiny C Compiler.
 But you can compile it under any modern C compiler.
 The source code can be compiled for a wide range of operating systems, but you need to create a makefile or a build script by yourself.
 I provide only two things: the binary file for Windows and the makefile for Linux.
@@ -67,3 +67,4 @@ Version history
 1.9.7.1: The documentation has been updated.
 1.9.8: The small changes.
 1.9.8.1-1.9.8.3: The documentation has been updated.
+1.9.9: The source code was recompiled under Tiny C Compiler.
