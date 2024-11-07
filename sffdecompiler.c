@@ -56,7 +56,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 1.9.9");
+ puts("Version 2.0");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2024 years");
  puts("This program is distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract by Osuna Richert Christophe");
@@ -309,39 +309,37 @@ void extract(FILE *input,const char *short_name)
  char *name=NULL;
  char *palette=NULL;
  char *shared=NULL;
- unsigned long int index,sff_size,number;
+ unsigned long int index,sff_size,amount,stop;
  sff_subhead subhead;
  sff_size=get_file_size(input);
  shared=get_memory(PALETTE_LENGTH);
- number=read_sff_head(input);
- show_progress(0,number);
+ amount=read_sff_head(input);
+ show_progress(0,amount);
  palette=extract_first(input,short_name);
  memcpy(shared,palette,PALETTE_LENGTH);
- for(index=1;index<number;++index)
+ subhead=read_sff_subhead(input);
+ stop=amount-1;
+ for(index=1;index<stop;++index)
  {
-  subhead=read_sff_subhead(input);
-  show_progress(index,number);
+  show_progress(index,amount);
   name=get_name(index+1,short_name,".pcx");
-  if (subhead.next_offset!=0)
+  if (subhead.length>0)
   {
-   if (subhead.length>0)
-   {
-    extract_normal_sprite(input,name,&subhead,palette,shared);
-   }
-   else
-   {
-    extract_linked_sprite(name,short_name,subhead.prev+1);
-   }
-
+   extract_normal_sprite(input,name,&subhead,palette,shared);
   }
   else
   {
-   extract_last(input,name,sff_size,&subhead,palette,shared);
+   extract_linked_sprite(name,short_name,subhead.prev+1);
   }
   go_offset(input,subhead.next_offset);
+  subhead=read_sff_subhead(input);
   extract_palette(name,shared);
   free(name);
  }
+ show_progress(index,amount);
+ name=get_name(index+1,short_name,".pcx");
+ extract_last(input,name,sff_size,&subhead,palette,shared);
+ free(name);
  free(shared);
  free(palette);
 }
