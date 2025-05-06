@@ -1,4 +1,5 @@
 #include "sffdecompiler.h"
+#include "format.h"
 
 void show_intro();
 void show_message(const char *message);
@@ -56,8 +57,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.0");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2024 years");
+ puts("Version 2.0.3");
+ puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
  puts("This program is distributed under GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract by Osuna Richert Christophe");
 }
@@ -209,8 +210,8 @@ unsigned long int read_sff_head(FILE *input)
  sff_head head;
  fread(&head,sizeof(sff_head),1,input);
  check_signature(head.signature);
- go_offset(input,head.sub_offset);
- return head.nb_imgs;
+ go_offset(input,head.subfile_offset);
+ return head.image_amount;
 }
 
 sff_subhead read_sff_subhead(FILE *input)
@@ -231,7 +232,7 @@ void extract_palette(const char *name,char *palette)
 
 void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,const char *shared)
 {
- if (subhead->same_pal==1)
+ if (subhead->same_palette==1)
  {
   if (subhead->group>152)
   {
@@ -329,7 +330,7 @@ void extract(FILE *input,const char *short_name)
   }
   else
   {
-   extract_linked_sprite(name,short_name,subhead.prev+1);
+   extract_linked_sprite(name,short_name,subhead.preversion+1);
   }
   go_offset(input,subhead.next_offset);
   subhead=read_sff_subhead(input);

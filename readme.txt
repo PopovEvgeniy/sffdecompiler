@@ -4,7 +4,7 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 2.0.0.1
+                             Version 2.0.3
 
 System requirements
 
@@ -70,3 +70,4 @@ Version history
 1.9.9: The source code was recompiled under Tiny C Compiler.
 2.0: The extraction process has improved.
 2.0.0.1: The makefile has been updated.
+2.0.1-2.0.3: The small changes.
