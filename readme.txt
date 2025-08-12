@@ -4,7 +4,7 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 2.0.3
+                             Version 2.0.3.1
 
 System requirements
 
@@ -26,7 +26,7 @@ Exit codes
 
 License
 
-This program is distributed under GNU GENERAL PUBLIC LICENSE.
+This program is distributed under the GNU GENERAL PUBLIC LICENSE.
 
 Source code
 
@@ -44,10 +44,6 @@ Follow these steps:
 3.
 Run as root for install: make install
 Run as root for uninstall: make uninstall
-
-Contact
-
-You can send me a letter at tuzik87@inbox.ru.
 
 Version history
 
@@ -71,3 +67,4 @@ Version history
 2.0: The extraction process has improved.
 2.0.0.1: The makefile has been updated.
 2.0.1-2.0.3: The small changes.
+2.0.3.1: The documentation has been updated.
