@@ -1,8 +1,8 @@
-﻿install:
+install:
 	@echo Installation in progress. Please wait
 	@$(CC) sffdecompiler.c -g0 -O0 -o /bin/sffdecompiler
 	@chmod ugo+rx /bin/sffdecompiler
-	@echo Installation successfully complete
+	@echo Installation was successfully completed
 uninstall:
 	@rm -f /bin/sffdecompiler
-	@echo Uninstallation successfully complete
+	@echo Uninstallation was successfully completed
