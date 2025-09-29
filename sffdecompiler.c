@@ -7,12 +7,10 @@ void show_progress(const unsigned long int start,const unsigned long int stop);
 FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
 void go_offset(FILE *file,const unsigned long int offset);
+char *get_memory(const size_t length);
 void data_dump(FILE *input,FILE *output,const size_t length);
 void fast_data_dump(FILE *input,FILE *output,const size_t length);
 unsigned long int get_file_size(FILE *file);
-void data_dump(FILE *input,FILE *output,const size_t length);
-void check_memory(const void *memory);
-char *get_memory(const size_t length);
 size_t get_extension_position(const char *source);
 char *get_short_name(const char *name);
 char *get_name(const unsigned long int index,const char *short_name,const char *extension);
@@ -57,7 +55,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.0.4");
+ puts("Version 2.0.5");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sff extract by Osuna Richert Christophe");
@@ -112,52 +110,55 @@ unsigned long int get_file_size(FILE *file)
  return length;
 }
 
+char *get_memory(const size_t length)
+{
+ char *memory=NULL;
+ memory=(char*)calloc(length,sizeof(char));
+ if(memory==NULL)
+ {
+  puts("Can't allocate memory");
+  exit(4);
+ }
+ return memory;
+}
+
 void data_dump(FILE *input,FILE *output,const size_t length)
 {
- unsigned char data;
- size_t index;
- data=0;
- for (index=0;index<length;++index)
+ char *buffer;
+ size_t current,elapsed,block;
+ current=0;
+ elapsed=0;
+ block=4096;
+ buffer=get_memory(block);
+ while (current<length)
  {
-  fread(&data,sizeof(unsigned char),1,input);
-  fwrite(&data,sizeof(unsigned char),1,output);
+  elapsed=length-current;
+  if (elapsed<block)
+  {
+   block=elapsed;
+  }
+  fread(buffer,sizeof(char),block,input);
+  fwrite(buffer,sizeof(char),block,output);
+  current+=block;
  }
-
+ free(buffer);
 }
 
 void fast_data_dump(FILE *input,FILE *output,const size_t length)
 {
- unsigned char *buffer=NULL;
- buffer=(unsigned char*)calloc(length,sizeof(unsigned char));
+ char *buffer;
+ buffer=(char*)malloc(length);
  if (buffer==NULL)
  {
   data_dump(input,output,length);
  }
  else
  {
-  fread(buffer,sizeof(unsigned char),length,input);
-  fwrite(buffer,sizeof(unsigned char),length,output);
+  fread(buffer,sizeof(char),length,input);
+  fwrite(buffer,sizeof(char),length,output);
   free(buffer);
  }
 
-}
-
-void check_memory(const void *memory)
-{
- if(memory==NULL)
- {
-  show_message("Can't allocate memory");
-  exit(4);
- }
-
-}
-
-char *get_memory(const size_t length)
-{
- char *memory=NULL;
- memory=(char*)calloc(length,sizeof(char));
- check_memory(memory);
- return memory;
 }
 
 size_t get_extension_position(const char *source)
@@ -181,8 +182,7 @@ char *get_short_name(const char *name)
  char *result=NULL;
  length=get_extension_position(name);
  result=get_memory(length+1);
- strncpy(result,name,length);
- return result;
+ return strncpy(result,name,length);
 }
 
 char *get_name(const unsigned long int index,const char *short_name,const char *extension)

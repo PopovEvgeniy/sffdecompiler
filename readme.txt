@@ -4,7 +4,7 @@
 
             Some code taken from Sff extract by Osuna Richert Christophe
 
-                             Version 2.0.4.1
+                             Version 2.0.5
 
 The program description.
 
@@ -24,7 +24,7 @@ License.
 
 This program is distributed under the GNU GENERAL PUBLIC LICENSE.
 
-The source code
+The source code.
 
 The code was compiled under Open Watcom.
 But you can compile it under any modern C compiler.
@@ -66,3 +66,4 @@ Version history.
 2.0.3.1: The documentation has been updated.
 2.0.4: The small changes.
 2.0.4.1: The documentation has been updated.
+2.0.5: The extraction process has improved.
