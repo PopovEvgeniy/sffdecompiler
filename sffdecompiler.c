@@ -55,10 +55,10 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.0.5");
+ puts("Version 2.0.6");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
- puts("Some code taken from Sff extract by Osuna Richert Christophe");
+ puts("Some code taken from Sffextract by Osuna Richert Christophe");
 }
 
 void show_message(const char *message)
@@ -126,11 +126,10 @@ void data_dump(FILE *input,FILE *output,const size_t length)
 {
  char *buffer;
  size_t current,elapsed,block;
- current=0;
  elapsed=0;
  block=4096;
  buffer=get_memory(block);
- while (current<length)
+ for (current=0;current<length;current+=block)
  {
   elapsed=length-current;
   if (elapsed<block)
@@ -139,7 +138,6 @@ void data_dump(FILE *input,FILE *output,const size_t length)
   }
   fread(buffer,sizeof(char),block,input);
   fwrite(buffer,sizeof(char),block,output);
-  current+=block;
  }
  free(buffer);
 }

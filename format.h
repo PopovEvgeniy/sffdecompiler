@@ -1,6 +1,6 @@
 #define PALETTE_LENGTH 768
 
-// The format description is based on code from Sff Extract
+// The format description is based on code from Sffextract
 
 typedef struct
 {
