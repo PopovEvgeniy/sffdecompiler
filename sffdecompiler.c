@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
  }
  else
  {
-  show_message("Extracting a graphics... Please wait");
+  show_message("Working...");
   work(argv[1]);
   show_message("The work has been finished");
  }
@@ -55,7 +55,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.0.6");
+ puts("Version 2.0.7");
  puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
