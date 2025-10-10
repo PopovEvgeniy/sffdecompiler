@@ -55,8 +55,8 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.0.7");
- puts("Mugen graphics extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
+ puts("Version 2.0.8");
+ puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2025 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
 }

@@ -1,14 +1,14 @@
                               SFF DECOMPILER
 
-                 Mugen graphics extractor by Popov Evgeniy Alekseyevich
+                 Mugen image extractor by Popov Evgeniy Alekseyevich
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.0.7
+                             Version 2.0.8
 
 The program description.
 
-This program lets you extract graphics from games that are built on the MUGEN game engine.
+This program lets you extract the images from games that are built on the MUGEN game engine.
 This program takes a target file name as the command-line argument. 
 
 Exit codes.
@@ -67,4 +67,4 @@ Version history.
 2.0.4: The small changes.
 2.0.4.1: The documentation has been updated.
 2.0.5: The extraction process has improved.
-2.0.6-2.0.7: The small changes.
+2.0.6-2.0.8: The small changes.
