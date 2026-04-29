@@ -6,6 +6,8 @@ void show_message(const char *message);
 void show_progress(const unsigned long int start,const unsigned long int stop);
 FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
+void read_data(void *data,const size_t length,FILE *input);
+void write_data(const void *data,const size_t length,FILE *output);
 void go_offset(FILE *target,const unsigned long int offset);
 char *get_memory(const size_t length);
 void check_signature(const char *signature);
@@ -52,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.1");
+ puts("Version 2.1.2");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -88,12 +90,36 @@ FILE *create_output_file(const char *name)
  return target;
 }
 
+void read_data(void *data,const size_t length,FILE *input)
+{
+ fread(data,length,sizeof(char),input);
+ if (ferror(input)!=0)
+ {
+  putchar('\n');
+  puts("Can't read data!");
+  exit(3);
+ }
+
+}
+
+void write_data(const void *data,const size_t length,FILE *output)
+{
+ fwrite(data,length,sizeof(char),output);
+ if (ferror(output)!=0)
+ {
+  putchar('\n');
+  puts("Can't write data!");
+  exit(4);
+ }
+
+}
+
 void go_offset(FILE *target,const unsigned long int offset)
 {
  if (fseek(target,offset,SEEK_SET)!=0)
  {
   show_message("Can't jump to the target offset");
-  exit(3);
+  exit(5);
  }
 
 }
@@ -105,7 +131,7 @@ char *get_memory(const size_t length)
  if(memory==NULL)
  {
   puts("Can't allocate memory");
-  exit(4);
+  exit(6);
  }
  return memory;
 }
@@ -115,7 +141,7 @@ void check_signature(const char *signature)
  if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
   puts("The invalid format!");
-  exit(5);
+  exit(7);
  }
 
 }
@@ -143,8 +169,8 @@ void data_dump(FILE *input,FILE *output,const size_t length)
   {
    block=elapsed;
   }
-  fread(buffer,sizeof(char),block,input);
-  fwrite(buffer,sizeof(char),block,output);
+  read_data(buffer,block,input);
+  write_data(buffer,block,output);
  }
  free(buffer);
 }
@@ -159,8 +185,8 @@ void fast_data_dump(FILE *input,FILE *output,const size_t length)
  }
  else
  {
-  fread(buffer,sizeof(char),length,input);
-  fwrite(buffer,sizeof(char),length,output);
+  read_data(buffer,length,input);
+  write_data(buffer,length,output);
   free(buffer);
  }
 
@@ -204,7 +230,7 @@ char *get_name(const unsigned long int index,const char *short_name,const char *
 unsigned long int read_sff_head(FILE *input)
 {
  sff_head head;
- fread(&head,sizeof(sff_head),1,input);
+ read_data(&head,sizeof(sff_head),input);
  check_signature(head.signature);
  go_offset(input,head.subfile_offset);
  return head.image_amount;
@@ -213,7 +239,7 @@ unsigned long int read_sff_head(FILE *input)
 sff_subhead read_sff_subhead(FILE *input)
 {
  sff_subhead subhead;
- fread(&subhead,sizeof(sff_subhead),1,input);
+ read_data(&subhead,sizeof(sff_subhead),input);
  return subhead;
 }
 
@@ -222,7 +248,7 @@ void extract_palette(const char *name,char *palette)
  FILE *input;
  input=open_input_file(name);
  go_offset(input,get_file_size(input)-PALETTE_LENGTH);
- fread(palette,sizeof(char),PALETTE_LENGTH,input);
+ read_data(palette,PALETTE_LENGTH,input);
  fclose(input);
 }
 
@@ -232,11 +258,11 @@ void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,con
  {
   if (subhead->group>152)
   {
-   fwrite(shared,sizeof(char),PALETTE_LENGTH,output);
+   write_data(shared,PALETTE_LENGTH,output);
   }
   else
   {
-   fwrite(palette,sizeof(char),PALETTE_LENGTH,output);
+   write_data(palette,PALETTE_LENGTH,output);
   }
 
  }

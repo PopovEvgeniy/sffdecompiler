@@ -4,7 +4,7 @@
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.1.1
+                             Version 2.1.2
 
 The program description.
 
@@ -16,9 +16,11 @@ Exit codes.
 0: The operation was successfully completed.
 1: Can't open the input file.
 2: Can't create the output file.
-3: Can't jump to the target offset.
-4: Can't allocate memory.
-5: The invalid format.
+3: Can't read data!
+4: Can't write data!
+5: Can't jump to the target offset.
+6: Can't allocate memory.
+7: The invalid format.
 
 License.
 
@@ -68,3 +70,4 @@ Version history.
 2.0.4.1: The documentation has been updated.
 2.0.5: The extraction process has improved.
 2.0.6-2.1.1: The small changes.
+2.1.2: The file processing has improved.
