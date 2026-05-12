@@ -4,7 +4,7 @@
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.1.2
+                             Version 2.1.3
 
 The program description.
 
@@ -71,3 +71,4 @@ Version history.
 2.0.5: The extraction process has improved.
 2.0.6-2.1.1: The small changes.
 2.1.2: The file processing has improved.
+2.1.3: The small changes.

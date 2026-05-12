@@ -54,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.2");
+ puts("Version 2.1.3");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -95,8 +95,7 @@ void read_data(void *data,const size_t length,FILE *input)
  fread(data,length,sizeof(char),input);
  if (ferror(input)!=0)
  {
-  putchar('\n');
-  puts("Can't read data!");
+  show_message("Can't read data!");
   exit(3);
  }
 
@@ -107,8 +106,7 @@ void write_data(const void *data,const size_t length,FILE *output)
  fwrite(data,length,sizeof(char),output);
  if (ferror(output)!=0)
  {
-  putchar('\n');
-  puts("Can't write data!");
+  show_message("Can't write data!");
   exit(4);
  }
 
