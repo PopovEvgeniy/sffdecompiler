@@ -14,18 +14,18 @@ void check_signature(const char *signature);
 void data_dump(FILE *input,FILE *output,const size_t length);
 void fast_data_dump(FILE *input,FILE *output,const size_t length);
 unsigned long int get_file_size(FILE *target);
-size_t get_extension_position(const char *source);
-char *get_short_name(const char *name);
-char *get_name(const unsigned long int index,const char *short_name,const char *extension);
+size_t get_name_without_extension_length(const char *source);
+char *get_name_without_extension(const char *name);
+char *get_name(const unsigned long int index,const char *name_without_extension,const char *extension);
 unsigned long int read_sff_head(FILE *input);
 sff_subhead read_sff_subhead(FILE *input);
 void extract_palette(const char *name,char *palette);
 void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,const char *shared);
-char *extract_first(FILE *input,const char *short_name);
+char *extract_first(FILE *input,const char *name_without_extension);
 void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhead,const char *palette,const char *shared);
-void extract_linked_sprite(const char *name,const char *short_name,const unsigned short int index);
+void extract_linked_sprite(const char *name,const char *name_without_extension,const unsigned short int index);
 void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead *subhead,const char *palette,const char *shared);
-void extract(FILE *input,const char *short_name);
+void extract(FILE *input,const char *name_without_extension);
 void work(const char *sff_name);
 
 int main(int argc, char *argv[])
@@ -54,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.3");
+ puts("Version 2.1.4");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -190,38 +190,73 @@ void fast_data_dump(FILE *input,FILE *output,const size_t length)
 
 }
 
-size_t get_extension_position(const char *source)
+size_t get_name_without_extension_length(const char *source)
 {
- size_t index,position;
- position=strlen(source);
- for(index=position;index>0;--index)
+ size_t length=0;
+ size_t index;
+ if (source!=NULL)
  {
-  if(source[index]=='.')
+  length=strlen(source);
+ }
+ if (length>=1)
+ {
+  if (source[length-1]=='.')
   {
-   position=index;
+   --length;
+  }
+
+ }
+ if (length>0)
+ {
+  if (source[length-1]==DIRECTORY_SEPARATOR)
+  {
+   length=0;
+  }
+
+ }
+ for (index=length;index>0;--index)
+ {
+  if (source[index-1]==DIRECTORY_SEPARATOR)
+  {
+   break;
+  }
+  if (source[index-1]=='.')
+  {
+   length=index-1;
    break;
   }
 
  }
- return position;
+ return length;
 }
 
-char *get_short_name(const char *name)
+char *get_name_without_extension(const char *name)
 {
- size_t length;
  char *result=NULL;
- length=get_extension_position(name);
- result=get_memory(length+1);
- return strncpy(result,name,length);
+ size_t length;
+ length=get_name_without_extension_length(name);
+ if (length>0)
+ {
+  result=get_memory(length+1);
+  strncpy(result,name,length);
+ }
+ return result;
 }
 
-char *get_name(const unsigned long int index,const char *short_name,const char *extension)
+char *get_name(const unsigned long int index,const char *name_without_extension,const char *extension)
 {
  char *name=NULL;
  size_t length;
- length=strlen(short_name)+strlen(extension)+12;
- name=get_memory(length+1);
- sprintf(name,"%s%lu%s",short_name,index,extension);
+ if (name_without_extension!=NULL)
+ {
+  if (extension!=NULL)
+  {
+   length=strlen(name_without_extension)+strlen(extension)+12;
+   name=get_memory(length+1);
+   sprintf(name,"%s%lu%s",name_without_extension,index,extension);
+  }
+
+ }
  return name;
 }
 
@@ -267,7 +302,7 @@ void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,con
 
 }
 
-char *extract_first(FILE *input,const char *short_name)
+char *extract_first(FILE *input,const char *name_without_extension)
 {
  sff_subhead subhead;
  unsigned long int length;
@@ -275,7 +310,7 @@ char *extract_first(FILE *input,const char *short_name)
  char *name=NULL;
  char *palette=NULL;
  subhead=read_sff_subhead(input);
- name=get_name(1,short_name,".pcx");
+ name=get_name(1,name_without_extension,".pcx");
  output=create_output_file(name);
  length=subhead.next_offset-ftell(input);
  fast_data_dump(input,output,(size_t)length);
@@ -298,13 +333,13 @@ void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhe
  fclose(output);
 }
 
-void extract_linked_sprite(const char *name,const char *short_name,const unsigned short int index)
+void extract_linked_sprite(const char *name,const char *name_without_extension,const unsigned short int index)
 {
  FILE *output;
  FILE *input;
  char *linked_name=NULL;
  unsigned long int length;
- linked_name=get_name(index,short_name,".pcx");
+ linked_name=get_name(index,name_without_extension,".pcx");
  input=open_input_file(linked_name);
  output=create_output_file(name);
  length=get_file_size(input);
@@ -325,7 +360,7 @@ void extract_last(FILE *input,const char *name,const unsigned long int sff_size,
  fclose(output);
 }
 
-void extract(FILE *input,const char *short_name)
+void extract(FILE *input,const char *name_without_extension)
 {
  char *name=NULL;
  char *palette=NULL;
@@ -336,21 +371,21 @@ void extract(FILE *input,const char *short_name)
  shared=get_memory(PALETTE_LENGTH);
  amount=read_sff_head(input);
  show_progress(1,amount);
- palette=extract_first(input,short_name);
+ palette=extract_first(input,name_without_extension);
  memcpy(shared,palette,PALETTE_LENGTH);
  subhead=read_sff_subhead(input);
  stop=amount-1;
  for(index=1;index<stop;++index)
  {
   show_progress(index+1,amount);
-  name=get_name(index+1,short_name,".pcx");
+  name=get_name(index+1,name_without_extension,".pcx");
   if (subhead.length>0)
   {
    extract_normal_sprite(input,name,&subhead,palette,shared);
   }
   else
   {
-   extract_linked_sprite(name,short_name,subhead.preversion+1);
+   extract_linked_sprite(name,name_without_extension,subhead.preversion+1);
   }
   go_offset(input,subhead.next_offset);
   subhead=read_sff_subhead(input);
@@ -358,7 +393,7 @@ void extract(FILE *input,const char *short_name)
   free(name);
  }
  show_progress(index+1,amount);
- name=get_name(index+1,short_name,".pcx");
+ name=get_name(index+1,name_without_extension,".pcx");
  extract_last(input,name,sff_size,&subhead,palette,shared);
  free(name);
  free(shared);
@@ -368,10 +403,10 @@ void extract(FILE *input,const char *short_name)
 void work(const char *sff_name)
 {
  FILE *input;
- char *short_name=NULL;
+ char *name_without_extension=NULL;
  input=open_input_file(sff_name);
- short_name=get_short_name(sff_name);
- extract(input,short_name);
+ name_without_extension=get_name_without_extension(sff_name);
+ extract(input,name_without_extension);
  fclose(input);
- free(short_name);
+ free(name_without_extension);
 }
