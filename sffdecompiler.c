@@ -54,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.4");
+ puts("Version 2.1.5");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -68,11 +68,16 @@ void show_message(const char *message)
 
 FILE *open_input_file(const char *name)
 {
- FILE *target;
+ FILE *target=NULL;
+ if (name==NULL)
+ {
+  puts("Can't open the input file");
+  exit(1);
+ }
  target=fopen(name,"rb");
  if (target==NULL)
  {
-  show_message("Can't open the input file");
+  puts("Can't open the input file");
   exit(1);
  }
  return target;
@@ -80,7 +85,12 @@ FILE *open_input_file(const char *name)
 
 FILE *create_output_file(const char *name)
 {
- FILE *target;
+ FILE *target=NULL;
+ if (name==NULL)
+ {
+  show_message("Can't create the ouput file");
+  exit(2);
+ }
  target=fopen(name,"wb");
  if (target==NULL)
  {
@@ -192,38 +202,32 @@ void fast_data_dump(FILE *input,FILE *output,const size_t length)
 
 size_t get_name_without_extension_length(const char *source)
 {
+ size_t index=0;
+ size_t position=0;
  size_t length=0;
- size_t index;
  if (source!=NULL)
  {
   length=strlen(source);
  }
- if (length>=1)
- {
-  if (source[length-1]=='.')
-  {
-   --length;
-  }
-
- }
- if (length>0)
- {
-  if (source[length-1]==DIRECTORY_SEPARATOR)
-  {
-   length=0;
-  }
-
- }
  for (index=length;index>0;--index)
  {
-  if (source[index-1]==DIRECTORY_SEPARATOR)
+  position=index-1;
+  if (source[position]==DIRECTORY_SEPARATOR)
   {
    break;
   }
-  if (source[index-1]=='.')
+  if (source[position]=='.')
   {
-   length=index-1;
-   break;
+   if (position>0)
+   {
+    if ((source[position-1]!=DIRECTORY_SEPARATOR) && (source[position-1]!='.'))
+    {
+     length=position;
+     break;
+    }
+
+   }
+
   }
 
  }
