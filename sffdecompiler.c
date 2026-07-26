@@ -54,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.5");
+ puts("Version 2.1.6");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -156,7 +156,7 @@ void check_signature(const char *signature)
 
 unsigned long int get_file_size(FILE *target)
 {
- unsigned long int length;
+ unsigned long int length=0;
  fseek(target,0,SEEK_END);
  length=ftell(target);
  rewind(target);
@@ -165,10 +165,10 @@ unsigned long int get_file_size(FILE *target)
 
 void data_dump(FILE *input,FILE *output,const size_t length)
 {
- char *buffer;
- size_t current,elapsed,block;
- elapsed=0;
- block=4096;
+ char *buffer=NULL;
+ size_t current=0;
+ size_t elapsed=0;
+ size_t block=4096;
  buffer=get_memory(block);
  for (current=0;current<length;current+=block)
  {
@@ -185,7 +185,7 @@ void data_dump(FILE *input,FILE *output,const size_t length)
 
 void fast_data_dump(FILE *input,FILE *output,const size_t length)
 {
- char *buffer;
+ char *buffer=NULL;
  buffer=(char*)malloc(length);
  if (buffer==NULL)
  {
@@ -237,7 +237,7 @@ size_t get_name_without_extension_length(const char *source)
 char *get_name_without_extension(const char *name)
 {
  char *result=NULL;
- size_t length;
+ size_t length=0;
  length=get_name_without_extension_length(name);
  if (length>0)
  {
@@ -250,7 +250,7 @@ char *get_name_without_extension(const char *name)
 char *get_name(const unsigned long int index,const char *name_without_extension,const char *extension)
 {
  char *name=NULL;
- size_t length;
+ size_t length=0;
  if (name_without_extension!=NULL)
  {
   if (extension!=NULL)
@@ -282,7 +282,7 @@ sff_subhead read_sff_subhead(FILE *input)
 
 void extract_palette(const char *name,char *palette)
 {
- FILE *input;
+ FILE *input=NULL;
  input=open_input_file(name);
  go_offset(input,get_file_size(input)-PALETTE_LENGTH);
  read_data(palette,PALETTE_LENGTH,input);
@@ -308,11 +308,11 @@ void set_palette(FILE *output,const sff_subhead *subhead,const char *palette,con
 
 char *extract_first(FILE *input,const char *name_without_extension)
 {
- sff_subhead subhead;
- unsigned long int length;
- FILE *output;
+ unsigned long int length=0;
+ FILE *output=NULL;
  char *name=NULL;
  char *palette=NULL;
+ sff_subhead subhead;
  subhead=read_sff_subhead(input);
  name=get_name(1,name_without_extension,".pcx");
  output=create_output_file(name);
@@ -328,8 +328,8 @@ char *extract_first(FILE *input,const char *name_without_extension)
 
 void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhead,const char *palette,const char *shared)
 {
- FILE *output;
- unsigned long int length;
+ FILE *output=NULL;
+ unsigned long int length=0;
  output=create_output_file(name);
  length=subhead->next_offset-ftell(input);
  fast_data_dump(input,output,(size_t)length);
@@ -339,10 +339,10 @@ void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhe
 
 void extract_linked_sprite(const char *name,const char *name_without_extension,const unsigned short int index)
 {
- FILE *output;
- FILE *input;
+ FILE *output=NULL;
+ FILE *input=NULL;
  char *linked_name=NULL;
- unsigned long int length;
+ unsigned long int length=0;
  linked_name=get_name(index,name_without_extension,".pcx");
  input=open_input_file(linked_name);
  output=create_output_file(name);
@@ -355,8 +355,8 @@ void extract_linked_sprite(const char *name,const char *name_without_extension,c
 
 void extract_last(FILE *input,const char *name,const unsigned long int sff_size,const sff_subhead *subhead,const char *palette,const char *shared)
 {
- FILE *output;
- unsigned long int length;
+ FILE *output=NULL;
+ unsigned long int length=0;
  output=create_output_file(name);
  length=sff_size-ftell(input);
  fast_data_dump(input,output,(size_t)length);
@@ -369,7 +369,10 @@ void extract(FILE *input,const char *name_without_extension)
  char *name=NULL;
  char *palette=NULL;
  char *shared=NULL;
- unsigned long int index,sff_size,amount,stop;
+ unsigned long int index=0;
+ unsigned long int sff_size=0;
+ unsigned long int amount=0;
+ unsigned long int stop=0;
  sff_subhead subhead;
  sff_size=get_file_size(input);
  shared=get_memory(PALETTE_LENGTH);
@@ -406,7 +409,7 @@ void extract(FILE *input,const char *name_without_extension)
 
 void work(const char *sff_name)
 {
- FILE *input;
+ FILE *input=NULL;
  char *name_without_extension=NULL;
  input=open_input_file(sff_name);
  name_without_extension=get_name_without_extension(sff_name);
