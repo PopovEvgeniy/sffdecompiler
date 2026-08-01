@@ -54,7 +54,7 @@ void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.6");
+ puts("Version 2.1.7");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -102,7 +102,7 @@ FILE *create_output_file(const char *name)
 
 void read_data(void *data,const size_t length,FILE *input)
 {
- fread(data,length,sizeof(char),input);
+ fread(data,sizeof(char),length,input);
  if (ferror(input)!=0)
  {
   show_message("Can't read data!");
@@ -113,7 +113,7 @@ void read_data(void *data,const size_t length,FILE *input)
 
 void write_data(const void *data,const size_t length,FILE *output)
 {
- fwrite(data,length,sizeof(char),output);
+ fwrite(data,sizeof(char),length,output);
  if (ferror(output)!=0)
  {
   show_message("Can't write data!");
@@ -157,7 +157,11 @@ void check_signature(const char *signature)
 unsigned long int get_file_size(FILE *target)
 {
  unsigned long int length=0;
- fseek(target,0,SEEK_END);
+ if (fseek(target,0,SEEK_END)!=0)
+ {
+  show_message("Can't get the file size!");
+  exit(8);
+ }
  length=ftell(target);
  rewind(target);
  return length;
