@@ -1,8 +1,10 @@
 #include "sffdecompiler.h"
 #include "format.h"
+#include "exitcode.h"
 
 void show_intro();
 void show_message(const char *message);
+void show_error(const char *message);
 void show_progress(const unsigned long int start,const unsigned long int stop);
 FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
@@ -34,6 +36,7 @@ int main(int argc, char *argv[])
  if (argc<2)
  {
   show_message("You must give a target file name as the command-line argument");
+  exit(COMMAND_LINE_ARGUMENTS_ERROR);
  }
  else
  {
@@ -44,17 +47,11 @@ int main(int argc, char *argv[])
  return 0;
 }
 
-void show_progress(const unsigned long int start,const unsigned long int stop)
-{
- putchar('\r');
- printf("Amount of the extracted files: %lu from %lu.The progress:%lu%%",start,stop,(start*100)/stop);
-}
-
 void show_intro()
 {
  putchar('\n');
  puts("SFF DECOMPILER");
- puts("Version 2.1.7");
+ puts("Version 2.1.8");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -66,19 +63,32 @@ void show_message(const char *message)
  puts(message);
 }
 
+void show_error(const char *message)
+{
+ fputc('\n',stderr);
+ fputs(message,stderr);
+ fputc('\n',stderr);
+}
+
+void show_progress(const unsigned long int start,const unsigned long int stop)
+{
+ putchar('\r');
+ printf("Amount of the extracted files: %lu from %lu",start,stop);
+}
+
 FILE *open_input_file(const char *name)
 {
  FILE *target=NULL;
  if (name==NULL)
  {
-  puts("Can't open the input file");
-  exit(1);
+  show_error("Can't open the input file");
+  exit(OPEN_FILE_ERROR);
  }
  target=fopen(name,"rb");
  if (target==NULL)
  {
-  puts("Can't open the input file");
-  exit(1);
+  show_error("Can't open the input file");
+  exit(OPEN_FILE_ERROR);
  }
  return target;
 }
@@ -88,36 +98,34 @@ FILE *create_output_file(const char *name)
  FILE *target=NULL;
  if (name==NULL)
  {
-  show_message("Can't create the ouput file");
-  exit(2);
+  show_error("Can't create the ouput file");
+  exit(CREATE_FILE_ERROR);
  }
  target=fopen(name,"wb");
  if (target==NULL)
  {
-  show_message("Can't create the ouput file");
-  exit(2);
+  show_error("Can't create the ouput file");
+  exit(CREATE_FILE_ERROR);
  }
  return target;
 }
 
 void read_data(void *data,const size_t length,FILE *input)
 {
- fread(data,sizeof(char),length,input);
- if (ferror(input)!=0)
+ if (fread(data,sizeof(char),length,input)<length)
  {
-  show_message("Can't read data!");
-  exit(3);
+  show_error("Can't read data!");
+  exit(READ_DATA_ERROR);
  }
 
 }
 
 void write_data(const void *data,const size_t length,FILE *output)
 {
- fwrite(data,sizeof(char),length,output);
- if (ferror(output)!=0)
+ if (fwrite(data,sizeof(char),length,output)<length)
  {
-  show_message("Can't write data!");
-  exit(4);
+  show_error("Can't write data!");
+  exit(WRITE_DATA_ERROR);
  }
 
 }
@@ -126,8 +134,8 @@ void go_offset(FILE *target,const unsigned long int offset)
 {
  if (fseek(target,offset,SEEK_SET)!=0)
  {
-  show_message("Can't jump to the target offset");
-  exit(5);
+  show_error("Can't jump to the target offset");
+  exit(SET_FILE_POSITION_ERROR);
  }
 
 }
@@ -138,8 +146,8 @@ char *get_memory(const size_t length)
  memory=(char*)calloc(length,sizeof(char));
  if(memory==NULL)
  {
-  puts("Can't allocate memory");
-  exit(6);
+  show_error("Can't allocate memory");
+  exit(MEMORY_ALLOCATION_ERROR);
  }
  return memory;
 }
@@ -148,8 +156,8 @@ void check_signature(const char *signature)
 {
  if (strncmp(signature,"ElecbyteSpr",12)!=0)
  {
-  puts("The invalid format!");
-  exit(7);
+  show_error("The invalid format!");
+  exit(INVALID_FORMAT_ERROR);
  }
 
 }
@@ -159,8 +167,8 @@ unsigned long int get_file_size(FILE *target)
  unsigned long int length=0;
  if (fseek(target,0,SEEK_END)!=0)
  {
-  show_message("Can't get the file size!");
-  exit(8);
+  show_error("Can't get the file size!");
+  exit(GET_FILE_SIZE_ERROR);
  }
  length=ftell(target);
  rewind(target);
