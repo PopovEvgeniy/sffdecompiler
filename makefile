@@ -4,5 +4,5 @@ install:
 	@chmod ugo+rx /bin/sffdecompiler
 	@echo Installation was successfully completed
 uninstall:
-	@rm -f /bin/sffdecompiler
+	@rm /bin/sffdecompiler
 	@echo Uninstallation was successfully completed

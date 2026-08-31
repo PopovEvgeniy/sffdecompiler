@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
 void show_intro()
 {
  putchar('\n');
- puts("SFF DECOMPILER");
- puts("Version 2.1.9");
+ puts("SFF DECOMPILER 2.2");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -140,7 +139,7 @@ char *get_memory(const size_t length)
 {
  char *memory=NULL;
  memory=(char*)calloc(length,sizeof(char));
- if(memory==NULL)
+ if (memory==NULL)
  {
   show_error("Can't allocate memory");
   exit(MEMORY_ALLOCATION_ERROR);
