@@ -33,16 +33,21 @@ void work(const char *sff_name);
 int main(int argc, char *argv[])
 {
  show_intro();
- if (argc<2)
+ switch (argc)
  {
-  show_message("You must give a target file name as the command-line argument");
+  case 1:
+  show_message("You must give a target file name as the command-line argument!");
   exit(COMMAND_LINE_ARGUMENTS_ERROR);
- }
- else
- {
+  break;
+  case 2:
   show_message("Working...");
   work(argv[1]);
   show_message("The work has been finished");
+  break;
+  default:
+  show_message("You gave too many command-line arguments");
+  exit(COMMAND_LINE_ARGUMENTS_ERROR);
+  break;
  }
  return 0;
 }
@@ -50,9 +55,9 @@ int main(int argc, char *argv[])
 void show_intro()
 {
  putchar('\n');
- puts("SFF DECOMPILER 2.2");
+ puts("SFF DECOMPILER 2.2.1");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
- puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE");
+ puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE (version 2 or later) terms");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
 }
 

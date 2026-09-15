@@ -4,7 +4,7 @@
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.2
+                             Version 2.2.1
 
 The program description.
 
@@ -22,7 +22,7 @@ Exit codes.
 6: Can't allocate memory.
 7: The invalid format.
 8: Can't get the file size!
-9: You don't give a target file name.
+9: The command-line arguments is invalid!
 
 License.
 
@@ -77,4 +77,4 @@ Version history.
 2.1.4-2.1.5: A small bug has been fixed.
 2.1.6-2.1.7: The small changes.
 2.1.8-2.1.9: The file processing has improved.
-2.2: The small changes.
+2.2-2.2.1: The small changes.
