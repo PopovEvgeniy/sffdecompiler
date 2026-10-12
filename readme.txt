@@ -4,7 +4,7 @@
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.2.1
+                             Version 2.2.2
 
 The program description.
 
@@ -18,11 +18,12 @@ Exit codes.
 2: Can't create the output file.
 3: Can't read data!
 4: Can't write data!
-5: Can't jump to the target offset.
-6: Can't allocate memory.
-7: The invalid format.
-8: Can't get the file size!
-9: The command-line arguments is invalid!
+5: Can't get the current position.
+6: Can't jump to the target offset.
+7: Can't allocate memory.
+8: The invalid format.
+9: Can't get the file size!
+10: The command-line arguments is invalid!
 
 License.
 
@@ -78,3 +79,4 @@ Version history.
 2.1.6-2.1.7: The small changes.
 2.1.8-2.1.9: The file processing has improved.
 2.2-2.2.1: The small changes.
+2.2.2: The file processing has improved.

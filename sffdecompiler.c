@@ -10,6 +10,7 @@ FILE *open_input_file(const char *name);
 FILE *create_output_file(const char *name);
 void read_data(void *data,const size_t length,FILE *input);
 void write_data(const void *data,const size_t length,FILE *output);
+unsigned long int get_position(FILE *target);
 void go_offset(FILE *target,const unsigned long int offset);
 char *get_memory(const size_t length);
 void check_signature(const char *signature);
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
 void show_intro()
 {
  putchar('\n');
- puts("SFF DECOMPILER 2.2.1");
+ puts("SFF DECOMPILER 2.2.2");
  puts("Mugen image extractor by Popov Evgeniy Alekseyevich, 2009-2026 years");
  puts("This program is distributed under the GNU GENERAL PUBLIC LICENSE (version 2 or later) terms");
  puts("Some code taken from Sffextract by Osuna Richert Christophe");
@@ -128,6 +129,18 @@ void write_data(const void *data,const size_t length,FILE *output)
   exit(WRITE_DATA_ERROR);
  }
 
+}
+
+unsigned long int get_position(FILE *target)
+{
+ long int position=0;
+ position=ftell(target);
+ if (position==-1)
+ {
+  show_error("Can't get the current position");
+  exit(GET_FILE_POSITION_ERROR);
+ }
+ return position;
 }
 
 void go_offset(FILE *target,const unsigned long int offset)
@@ -328,7 +341,7 @@ char *extract_first(FILE *input,const char *name_without_extension)
  subhead=read_sff_subhead(input);
  name=get_name(1,name_without_extension,".pcx");
  output=create_output_file(name);
- length=subhead.next_offset-ftell(input);
+ length=subhead.next_offset-get_position(input);
  fast_data_dump(input,output,(size_t)length);
  fclose(output);
  free(name);
@@ -343,7 +356,7 @@ void extract_normal_sprite(FILE *input,const char *name,const sff_subhead *subhe
  FILE *output=NULL;
  unsigned long int length=0;
  output=create_output_file(name);
- length=subhead->next_offset-ftell(input);
+ length=subhead->next_offset-get_position(input);
  fast_data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
@@ -370,7 +383,7 @@ void extract_last(FILE *input,const char *name,const unsigned long int sff_size,
  FILE *output=NULL;
  unsigned long int length=0;
  output=create_output_file(name);
- length=sff_size-ftell(input);
+ length=sff_size-get_position(input);
  fast_data_dump(input,output,(size_t)length);
  set_palette(output,subhead,palette,shared);
  fclose(output);
