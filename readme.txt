@@ -4,7 +4,7 @@
 
             Some code taken from Sffextract by Osuna Richert Christophe
 
-                             Version 2.2.2
+                             Version 2.2.2.1
 
 The program description.
 
@@ -23,7 +23,7 @@ Exit codes.
 7: Can't allocate memory.
 8: The invalid format.
 9: Can't get the file size!
-10: The command-line arguments is invalid!
+10: The command-line arguments are invalid!
 
 License.
 
@@ -51,32 +51,33 @@ Version history.
 1.0: The initial version.
 1.0.1-1.5.9: The old builds.
 1.6-1.6.8: The small changes.
-1.6.9: The source code has improved. Linux support has been added.
+1.6.9: The source code has been improved. Linux support has been added.
 1.6.9.0.1: The documentation has been updated.
 1.7-1.7.6: The small changes.
 1.7.6.1: The makefile has been updated.
 1.7.7-1.8: The small changes.
-1.8.1: A small bug has been fixed.
+1.8.1: The small bug has been fixed.
 1.8.2-1.8.8: The small changes.
 1.8.8.1-1.8.8.2: The makefile has been updated.
 1.8.9-1.9.6: The small changes.
-1.9.7: Visual C++ support has improved.
+1.9.7: Visual C++ support has been improved.
 1.9.7.1: The documentation has been updated.
 1.9.8: The small changes.
 1.9.8.1-1.9.8.3: The documentation has been updated.
 1.9.9: The source code was recompiled under Tiny C Compiler.
-2.0: The extraction process has improved.
+2.0: The extraction process has been improved.
 2.0.0.1: The makefile has been updated.
 2.0.1-2.0.3: The small changes.
 2.0.3.1: The documentation has been updated.
 2.0.4: The small changes.
 2.0.4.1: The documentation has been updated.
-2.0.5: The extraction process has improved.
+2.0.5: The extraction process has been improved.
 2.0.6-2.1.1: The small changes.
-2.1.2: The file processing has improved.
+2.1.2: The file processing has been improved.
 2.1.3: The small changes.
-2.1.4-2.1.5: A small bug has been fixed.
+2.1.4-2.1.5: The small bug has been fixed.
 2.1.6-2.1.7: The small changes.
-2.1.8-2.1.9: The file processing has improved.
+2.1.8-2.1.9: The file processing has been improved.
 2.2-2.2.1: The small changes.
-2.2.2: The file processing has improved.
+2.2.2: The file processing has been improved.
+2.2.2.1: The documentation has been updated.
